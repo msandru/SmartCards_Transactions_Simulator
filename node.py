@@ -1,0 +1,55 @@
+from multiprocessing.connection import Client
+from multiprocessing.connection import Listener
+
+
+def new_listener(address, auth_key=bytes('0101001', 'utf-8')):
+    return Listener(address, authkey=auth_key)
+
+
+def new_sender(address, auth_key=bytes('0101001', 'utf-8')):
+    return Client(address, authkey=auth_key)
+
+
+class Node:
+    def __init__(self):
+        self.listeners = []
+        self.addresses_listeners = []
+
+        self.senders = []
+        self.addresses_senders = []
+
+    def add_listener(self, listener):
+        self.listeners.append(listener)
+        self.addresses_listeners.append(listener[0])
+
+    def add_sender(self, sender):
+        self.senders.append(sender)
+        self.addresses_senders.append(sender[0])
+
+    def send_message_to_address(self, address, message):
+        # No error handling, use the correct addresses
+        position = self.addresses_senders.index(address)
+
+        self.senders[position].send(message)
+
+    def close_connection(self, address):
+        try:
+            position = self.addresses_senders.index(address)
+
+            self.senders[position].close()
+        except:
+            position = self.addresses_listeners.index(address)
+
+            self.listeners[position].close()
+
+    def accept_connection(self, address):
+        # No error handling, use the correct addresses
+        position = self.addresses_listeners.index(address)
+
+        self.listeners[position] = self.listeners[position].accept()
+
+    def receive_message(self, address):
+        # No error handling, use the correct addresses
+        position = self.addresses_listeners.index(address)
+
+        return self.listeners[position].recv()
