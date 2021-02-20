@@ -18,13 +18,13 @@ class Node:
         self.senders = []
         self.addresses_senders = []
 
-    def add_listener(self, listener):
+    def add_listener(self, listener, address):
         self.listeners.append(listener)
-        self.addresses_listeners.append(listener[0])
+        self.addresses_listeners.append(address)
 
-    def add_sender(self, sender):
+    def add_sender(self, sender, address):
         self.senders.append(sender)
-        self.addresses_senders.append(sender[0])
+        self.addresses_senders.append(address)
 
     def send_message_to_address(self, address, message):
         # No error handling, use the correct addresses
