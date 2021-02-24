@@ -3,6 +3,9 @@ from node import new_sender
 from node import new_listener
 from constants import ADDRESS_MC
 from constants import ADDRESS_CM
+import utils as utils
+
+utils.generate_keys(False)
 
 core = Node()
 
