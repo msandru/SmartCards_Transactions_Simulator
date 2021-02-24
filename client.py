@@ -30,13 +30,17 @@ ind_1 = client_public_key.find('\n')
 ind_2 = client_public_key.rfind('\n')
 client_public_key = client_public_key[ind_1+1:ind_2]
 
+print(client_public_key)
+print("-------------")
+
 cipher = AES.new(symmetric_session_key, AES.MODE_CFB)
 ciphertext = cipher.encrypt(bytes(client_public_key, encoding='utf-8'))
 
-# core = Node()
-# core.add_sender(new_sender(ADDRESS_CM), ADDRESS_CM)
-# core.send_message_to_address(ADDRESS_CM, "test")
-# core.close_connection(ADDRESS_CM)
+core = Node()
+core.add_sender(new_sender(ADDRESS_CM), ADDRESS_CM)
+core.send_message_to_address(ADDRESS_CM, encrypted_symmetric_key)
+core.send_message_to_address(ADDRESS_CM, ciphertext)
+core.close_connection(ADDRESS_CM)
 #
 # core.add_listener(new_listener(ADDRESS_MC), ADDRESS_MC)
 # core.accept_connection(ADDRESS_MC)
