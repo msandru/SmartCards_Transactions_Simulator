@@ -1,5 +1,6 @@
 from Cryptodome.Cipher import AES
 from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
 import os.path
 from os import path
 
@@ -57,3 +58,13 @@ def load_public_keys(is_client):
     return public_key
 
 
+def decrypt_aes(key, msg):
+    cipher = AES.new(key, AES.MODE_CFB)
+    plaintext = cipher.decrypt(msg)
+    return plaintext.decode('utf-8')
+
+
+def decrypt_rsa(path_key, ciphertext):
+    key = RSA.importKey(open(path_key).read())
+    cipher = PKCS1_OAEP.new(key)
+    return cipher.decrypt(ciphertext)
