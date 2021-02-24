@@ -26,6 +26,10 @@ symmetric_session_key = get_random_bytes(32)
 cipher_asymmetric = PKCS1_OAEP.new(RSA.import_key(merchant_public_key))
 encrypted_symmetric_key = cipher_asymmetric.encrypt(symmetric_session_key)
 
+ind_1 = client_public_key.find('\n')
+ind_2 = client_public_key.rfind('\n')
+client_public_key = client_public_key[ind_1+1:ind_2]
+
 cipher = AES.new(symmetric_session_key, AES.MODE_CFB)
 ciphertext = cipher.encrypt(bytes(client_public_key, encoding='utf-8'))
 
